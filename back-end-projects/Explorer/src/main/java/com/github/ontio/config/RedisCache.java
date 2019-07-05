@@ -4,6 +4,7 @@ import com.github.ontio.ApplicationContextProvider;
 import com.github.ontio.util.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -24,7 +25,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 @Component
 @Slf4j
-@DependsOn("applicationContextProviderExplorer")
 public class RedisCache implements Cache {
 
     private String CLASS_NAME = this.getClass().getSimpleName();
@@ -32,9 +32,11 @@ public class RedisCache implements Cache {
     // 读写锁
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
-    private RedisTemplate<String, Object> redisTemplate = ApplicationContextProvider.getBean("redisTemplate");
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
-    private ParamsConfig paramsConfig = ApplicationContextProvider.getBean("ParamsConfig");
+    @Autowired
+    private ParamsConfig paramsConfig;
 
     private String id = "defaultrediscacheid001";
 
